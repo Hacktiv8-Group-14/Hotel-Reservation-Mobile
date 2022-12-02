@@ -30,6 +30,7 @@ export default function DetailHotel({route, navigation}) {
   const detail = useSelector(state => state.detail.detail);
   const isPending = useSelector(state => state.detail.isPending);
   const review = useSelector(state => state.review.review);
+  const user = useSelector(state => state.login.user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,60 +56,6 @@ export default function DetailHotel({route, navigation}) {
   }, []);
 
   useEffect(() => {
-    console.log('hotel PHOTOS', hotelPhotos);
-  }, [hotelPhotos]);
-
-  const [index, setIndex] = useState(0);
-  const indexRef = useRef(index);
-  indexRef.current = index;
-  const onScroll = useCallback(event => {
-    const slideSize = event.nativeEvent.layoutMeasurement.width;
-    const index = event.nativeEvent.contentOffset.x / slideSize;
-    const roundIndex = Math.round(index);
-
-    const distance = Math.abs(roundIndex - index);
-
-    // Prevent one pixel triggering setIndex in the middle
-    // of the transition. With this we have to scroll a bit
-    // more to trigger the index change.
-    const isNoMansLand = 0.4 < distance;
-
-    if (roundIndex !== indexRef.current && !isNoMansLand) {
-      setIndex(roundIndex);
-    }
-  }, []);
-
-  const width = Dimensions.get('window').width;
-  console.log('width', width);
-
-  const flatListOptimizationProps = {
-    initialNumToRender: 0,
-    maxToRenderPerBatch: 1,
-    removeClippedSubviews: true,
-    scrollEventThrottle: 16,
-    windowSize: 2,
-    keyExtractor: useCallback(e => e.id, []),
-    getItemLayout: useCallback(
-      (_, index) => ({
-        index,
-        length: width,
-        offset: index * width,
-      }),
-      [],
-    ),
-  };
-
-  // const [description, setDescription] = useState([]);
-
-  const readMore = () => {
-    if (lineText === 0) {
-      setLineText(3);
-    } else {
-      setLineText(0);
-    }
-  };
-
-  useEffect(() => {
     if (detail?.hotel_id !== hotel_id) {
       dispatch(fetchReview(route.params));
     }
@@ -119,31 +66,6 @@ export default function DetailHotel({route, navigation}) {
       dispatch(fetchDetail(route.params));
     }
   }, []);
-
-  // console.log('==>', description);
-
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       'https://apidojo-booking-v1.p.rapidapi.com/properties/get-description',
-  //       {
-  //         params: {
-  //           hotel_ids: hotel_id,
-  //           languagecode: 'id',
-  //         },
-  //         headers: {
-  //           'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-  //           'X-RapidAPI-Host': 'apidojo-booking-v1.p.rapidapi.com',
-  //         },
-  //       },
-  //     )
-  //     .then(response => {
-  //       setDescription(response.data);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // }, []);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -300,15 +222,18 @@ export default function DetailHotel({route, navigation}) {
               </Text>
             </View>
             <Button
-              onPress={() =>
-                navigation.navigate('Rooms', {
-                  hotel_id: hotel_id,
-                  checkOut: checkOut,
-                  checkIn: checkIn,
-                  guests: guests,
-                  rooms: rooms,
-                })
-              }
+              onPress={() => {
+                user
+                  ? navigation.navigate('Rooms', {
+                      hotel_id: hotel_id,
+                      checkOut: checkOut,
+                      checkIn: checkIn,
+                      guests: guests,
+                      rooms: rooms,
+                      image,
+                    })
+                  : navigation.navigate('Sign');
+              }}
               title="Pilih Kamar"
               color={colors.yellow}
               size={10}
