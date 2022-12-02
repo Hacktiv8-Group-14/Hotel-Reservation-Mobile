@@ -19,7 +19,7 @@ export default function Rooms({route, navigation}) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(room.hotel_id !== hotel_id){
+    if (room.hotel_id !== hotel_id) {
       dispatch(fetchRooms(route.params));
     }
   }, []);
@@ -29,42 +29,12 @@ export default function Rooms({route, navigation}) {
       <View style={styles.header}>
         <Header title="Pilih Kamar" onPress={() => navigation.goBack()} />
       </View>
-<<<<<<< HEAD
-      <ScrollView>
-        {room?.block?.map((item, index) => (
-          <RoomsCard
-            title={item?.name_without_policy}
-            price={item?.product_price_breakdown.all_inclusive_amount?.value}
-            image={room.rooms[item?.room_id].photos}
-            bed_type={
-              room.rooms[item?.room_id].bed_configurations[0].bed_types[0]
-                .name_with_count
-            }
-            person={guests}
-            onPress={() =>
-              navigation.navigate('DetailRoom', {
-                name_room: item?.name_without_policy,
-                image: room.rooms[item?.room_id].photos,
-                price:
-                  item?.product_price_breakdown?.all_inclusive_amount?.value,
-                bed_type:
-                  room.rooms[item?.room_id].bed_configurations[0].bed_types[0]
-                    .name_with_count,
-                room: rooms,
-                person: guests,
-                checkIn: checkIn,
-                checkOut: checkOut,
-                image: room.rooms[item?.room_id].photos,
-                detail_room: room.rooms[item?.room_id],
-              })
-            }
-          />
-        ))}
-      </ScrollView>
-=======
       {isPending ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{ fontSize: 18, color: colors.darkBlue, fontWeight: 'bold' }}>Loading...</Text>
+          <Text
+            style={{fontSize: 18, color: colors.darkBlue, fontWeight: 'bold'}}>
+            Loading...
+          </Text>
         </View>
       ) : (
         <ScrollView>
@@ -93,15 +63,14 @@ export default function Rooms({route, navigation}) {
                   checkIn: checkIn,
                   checkOut: checkOut,
                   image: room.rooms[item?.room_id].photos,
-                  mainImage: image
+                  mainImage: image,
+                  detail_room: room.rooms[item?.room_id],
                 })
               }
             />
           ))}
         </ScrollView>
       )}
-      
->>>>>>> f1c67891b30f18baf526be021cb8369e27365a91
     </SafeAreaView>
   );
 }

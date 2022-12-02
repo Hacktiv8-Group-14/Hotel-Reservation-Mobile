@@ -19,11 +19,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchDetail} from '../../features/detailHotelSlice';
 import {fetchReview} from '../../features/ReviewSlice';
 import Kebijakan from './parts/Kebijakan';
-import { formatIDR } from '../../utils';
-import Swiper from 'react-native-swiper'
+import {formatIDR} from '../../utils';
 
 export default function DetailHotel({route, navigation}) {
-  const {hotel_id, checkIn, checkOut, guests, rooms, image} = route.params;
+  const {hotel_id, checkIn, checkOut, guests, rooms} = route.params;
   const [hotelPhotos, setHotelPhotos] = useState([]);
   const [lineText, setLineText] = useState(3);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -40,7 +39,8 @@ export default function DetailHotel({route, navigation}) {
           url: 'https://apidojo-booking-v1.p.rapidapi.com/properties/get-hotel-photos',
           params: {hotel_ids: hotel_id, languagecode: 'id'},
           headers: {
-            'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
+            'X-RapidAPI-Key':
+              '8acc31ed09mshcd579e2a1d4d065p1adbebjsn5a767b7f288e',
             'X-RapidAPI-Host': 'apidojo-booking-v1.p.rapidapi.com',
           },
         });
@@ -57,6 +57,46 @@ export default function DetailHotel({route, navigation}) {
   useEffect(() => {
     console.log('hotel PHOTOS', hotelPhotos);
   }, [hotelPhotos]);
+
+  const [index, setIndex] = useState(0);
+  const indexRef = useRef(index);
+  indexRef.current = index;
+  const onScroll = useCallback(event => {
+    const slideSize = event.nativeEvent.layoutMeasurement.width;
+    const index = event.nativeEvent.contentOffset.x / slideSize;
+    const roundIndex = Math.round(index);
+
+    const distance = Math.abs(roundIndex - index);
+
+    // Prevent one pixel triggering setIndex in the middle
+    // of the transition. With this we have to scroll a bit
+    // more to trigger the index change.
+    const isNoMansLand = 0.4 < distance;
+
+    if (roundIndex !== indexRef.current && !isNoMansLand) {
+      setIndex(roundIndex);
+    }
+  }, []);
+
+  const width = Dimensions.get('window').width;
+  console.log('width', width);
+
+  const flatListOptimizationProps = {
+    initialNumToRender: 0,
+    maxToRenderPerBatch: 1,
+    removeClippedSubviews: true,
+    scrollEventThrottle: 16,
+    windowSize: 2,
+    keyExtractor: useCallback(e => e.id, []),
+    getItemLayout: useCallback(
+      (_, index) => ({
+        index,
+        length: width,
+        offset: index * width,
+      }),
+      [],
+    ),
+  };
 
   // const [description, setDescription] = useState([]);
 
@@ -115,24 +155,47 @@ export default function DetailHotel({route, navigation}) {
         <>
           <ScrollView>
             <View>
-              <Swiper style={{ height: 230 }}>
-                {hotelPhotos.slice(0, 5).map((item, index) => {
-                  return(
-                    <Image
-                      key={index}
-                      source={{
-                        uri: `https://cf.bstatic.com${item[5]}`,
-                      }}
-                      style={styles.image}
-                    />
-                  )
+              {/* <ScrollView 
+                horizontal={true}
+                style={{flexDirection: 'row', borderWidth: 2}}
+              >
+                {hotelPhotos.map((item, index) => {
+                  <Image
+                    key={index}
+                    source={{
+                      uri: `https://cf.bstatic.com${item[6]}`,
+                    }}
+                    style={styles.image}
+                  />
                 })}
-              </Swiper>
+              </ScrollView> */}
+              <FlatList
+                data={hotelPhotos}
+                style={styles.image}
+                renderItem={({item}) => (
+                  <Image
+                    source={{
+                      uri: `https://cf.bstatic.com${item[6]}`,
+                    }}
+                    style={styles.image}
+                  />
+                )}
+                pagingEnabled
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                onScroll={onScroll}
+                {...flatListOptimizationProps}
+              />
               <View style={styles.header}>
                 <Header onPress={() => navigation.goBack()} />
               </View>
               <View style={styles.boxPrice}>
-                <Text style={styles.price}>{formatIDR.format(detail?.composite_price_breakdown?.all_inclusive_amount?.value)}</Text>
+                <Text style={styles.price}>
+                  {formatIDR.format(
+                    detail?.composite_price_breakdown?.all_inclusive_amount
+                      ?.value,
+                  )}
+                </Text>
                 <Text style={styles.price}>/Night</Text>
               </View>
             </View>
@@ -172,6 +235,24 @@ export default function DetailHotel({route, navigation}) {
                   </Text>
                 ))}
               </ScrollView>
+              {/* {description ? (
+                <View>
+                  <Text numberOfLines={lineText} style={styles.description}>
+                    {description[1]
+                      ? description[1]?.description
+                      : description[0]?.description}
+                  </Text>
+                  {lineText === 0 ? (
+                    <></>
+                  ) : (
+                    <Text onPress={readMore} style={{color: colors.darkBlue}}>
+                      Read More..
+                    </Text>
+                  )}
+                </View>
+              ) : (
+                <></>
+              )} */}
             </View>
             <View style={styles.cardItem}>
               <ReviewParts
@@ -204,7 +285,10 @@ export default function DetailHotel({route, navigation}) {
                   fontWeight: 'bold',
                   fontSize: 15,
                 }}>
-                {formatIDR.format(detail?.composite_price_breakdown?.all_inclusive_amount?.value)}
+                {formatIDR.format(
+                  detail?.composite_price_breakdown?.all_inclusive_amount
+                    ?.value,
+                )}
                 <Text
                   style={{
                     color: colors.white,
@@ -223,7 +307,6 @@ export default function DetailHotel({route, navigation}) {
                   checkIn: checkIn,
                   guests: guests,
                   rooms: rooms,
-                  image
                 })
               }
               title="Pilih Kamar"
@@ -247,7 +330,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 230,
-    width: "100%",
+    width: '100%',
   },
   header: {
     position: 'absolute',

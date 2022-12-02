@@ -21,25 +21,79 @@ export default function DetailRoom({route, navigation}) {
     person,
     checkIn,
     checkOut,
-    mainImage,
+    detail_room,
   } = route.params;
 
+  console.log(detail_room);
   return (
     <SafeAreaView style={styles.page}>
       <ScrollView>
         <View>
-          <Text>Photos</Text>
-          <ScrollView horizontal={true}>
-            {image?.map((item, index) => (
-              <Image
-                key={index}
-                source={{
-                  uri: item.url_original,
-                }}
-                style={{width: 100, height: 100}}
-              />
-            ))}
-          </ScrollView>
+          <Image
+            source={{
+              uri: image[1] ? image[1]?.url_original : image[0]?.url_original,
+            }}
+            style={styles.image}
+          />
+          <View style={styles.buttonBack}>
+            <Header
+              numberOfLines={1}
+              color={colors.white}
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+        </View>
+        <View style={{paddingBottom: 80}}>
+          <View style={styles.roomDescription}>
+            <Text style={styles.nameRoom}>{name_room}</Text>
+            <View style={{flexDirection: 'row', marginTop: 5}}>
+              <View style={{flexDirection: 'row'}}>
+                <Button
+                  type="icon"
+                  color={colors.darkGrey}
+                  icon={'person-outline'}
+                  size={15}
+                />
+                <Text style={{color: colors.darkGrey}}>{person} Guest</Text>
+              </View>
+              <Text style={{marginHorizontal: 10}}>|</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Button
+                  type="icon"
+                  color={colors.darkGrey}
+                  icon={'bed-outline'}
+                  size={18}
+                />
+                <Text style={{color: colors.darkGrey}}>{bed_type}</Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.facilities}>
+            <ScrollView horizontal={true}>
+              {detail_room?.highlights?.map(item => (
+                <Text style={styles.facilitiesTitle}>
+                  {item?.translated_name}
+                </Text>
+              ))}
+            </ScrollView>
+          </View>
+          <View style={styles.contentImage}>
+            <Text style={styles.title}>Photos</Text>
+            <ScrollView horizontal={true}>
+              {image?.map(item => (
+                <Image
+                  source={{
+                    uri: item.url_original,
+                  }}
+                  style={styles.imageRoom}
+                />
+              ))}
+            </ScrollView>
+          </View>
+          <View style={styles.container}>
+            <Text style={styles.title}>Description</Text>
+            <Text>{detail_room?.description}</Text>
+          </View>
         </View>
       </ScrollView>
       <View style={styles.SelectRoom}>
@@ -85,7 +139,6 @@ export default function DetailRoom({route, navigation}) {
               checkOut: checkOut,
               name_room: name_room,
               image: image[1]?.url_original,
-              mainImage,
             })
           }
         />

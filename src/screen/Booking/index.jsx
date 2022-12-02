@@ -12,7 +12,6 @@ import {Button, Input} from '../../component/atoms';
 import {colors, formatIDR} from '../../utils';
 import {Header} from '../../component/molecules';
 import {addBookHistory} from '../../features/bookHistorySlice';
-import {formatIDR} from '../../utils';
 
 function makeid(length) {
   var result = '';
