@@ -12,6 +12,7 @@ import {Button, Input} from '../../component/atoms';
 import {colors, formatIDR} from '../../utils';
 import {Header} from '../../component/molecules';
 import {addBookHistory} from '../../features/bookHistorySlice';
+import {formatIDR} from '../../utils';
 
 function makeid(length) {
   var result = '';
@@ -50,7 +51,7 @@ export default function Booking({route, navigation}) {
     <SafeAreaView style={styles.page}>
       <View style={styles.header}>
         <Header
-          title="booking"
+          title="Booking Page"
           color={colors.white}
           onPress={() => navigation.goBack()}
         />
@@ -80,12 +81,12 @@ export default function Booking({route, navigation}) {
               </View>
               <View style={styles.arrivalDate}>
                 <View style={styles.arrivaTitle}>
-                  <Text>Check-in</Text>
-                  <Text>{checkIn}</Text>
+                  <Text style={styles.person}>Check-in</Text>
+                  <Text style={styles.person}>{checkIn}</Text>
                 </View>
                 <View style={styles.arrivaTitle}>
-                  <Text>Check-out</Text>
-                  <Text>{checkOut}</Text>
+                  <Text style={styles.person}>Check-out</Text>
+                  <Text style={styles.person}>{checkOut}</Text>
                 </View>
               </View>
             </View>

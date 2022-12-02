@@ -67,7 +67,12 @@ export default function Input({
 const styles = StyleSheet.create({
   Input: (type, backgroundColor) => ({
     borderRadius: 10,
+<<<<<<< HEAD
     backgroundColor: backgroundColor ? backgroundColor : colors.white,
+=======
+    backgroundColor:
+      backgroundColor ? backgroundColor : colors.white,
+>>>>>>> f1c67891b30f18baf526be021cb8369e27365a91
     paddingRight: type === 'password' || type === 'search' ? 40 : 20,
     paddingLeft:
       type === 'user' || type === 'telephone' || type === 'email' ? 40 : 20,

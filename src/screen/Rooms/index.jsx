@@ -13,12 +13,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchRooms} from '../../features/getRoomsSlice';
 
 export default function Rooms({route, navigation}) {
-  const {hotel_id, checkOut, checkIn, guests, rooms} = route.params;
+  const {hotel_id, checkOut, checkIn, guests, rooms, image} = route.params;
   const room = useSelector(state => state.rooms.rooms);
+  const isPending = useSelector(state => state.rooms.isPending);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchRooms(route.params));
+    if(room.hotel_id !== hotel_id){
+      dispatch(fetchRooms(route.params));
+    }
   }, []);
 
   return (
@@ -26,6 +29,7 @@ export default function Rooms({route, navigation}) {
       <View style={styles.header}>
         <Header title="Pilih Kamar" onPress={() => navigation.goBack()} />
       </View>
+<<<<<<< HEAD
       <ScrollView>
         {room?.block?.map((item, index) => (
           <RoomsCard
@@ -57,6 +61,47 @@ export default function Rooms({route, navigation}) {
           />
         ))}
       </ScrollView>
+=======
+      {isPending ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{ fontSize: 18, color: colors.darkBlue, fontWeight: 'bold' }}>Loading...</Text>
+        </View>
+      ) : (
+        <ScrollView>
+          {room?.block?.map((item, index) => (
+            <RoomsCard
+              key={index}
+              title={item?.name_without_policy}
+              price={item?.product_price_breakdown.all_inclusive_amount?.value}
+              image={room.rooms[item?.room_id].photos}
+              bed_type={
+                room.rooms[item?.room_id].bed_configurations[0].bed_types[0]
+                  .name_with_count
+              }
+              person={guests}
+              onPress={() =>
+                navigation.navigate('DetailRoom', {
+                  name_room: item?.name_without_policy,
+                  image: room.rooms[item?.room_id].photos,
+                  price:
+                    item?.product_price_breakdown?.all_inclusive_amount?.value,
+                  bed_type:
+                    room.rooms[item?.room_id].bed_configurations[0].bed_types[0]
+                      .name_with_count,
+                  room: rooms,
+                  person: guests,
+                  checkIn: checkIn,
+                  checkOut: checkOut,
+                  image: room.rooms[item?.room_id].photos,
+                  mainImage: image
+                })
+              }
+            />
+          ))}
+        </ScrollView>
+      )}
+      
+>>>>>>> f1c67891b30f18baf526be021cb8369e27365a91
     </SafeAreaView>
   );
 }
@@ -64,7 +109,7 @@ export default function Rooms({route, navigation}) {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.darkBlue,
-    padding: 10,
+    padding: 20,
   },
   page: {
     backgroundColor: colors.white,
