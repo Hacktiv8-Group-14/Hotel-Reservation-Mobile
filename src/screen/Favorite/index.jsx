@@ -36,6 +36,7 @@ export default function Favorite({navigation}) {
                     reviewTotal={item?.reviewTotal}
                     guests={item?.guests}
                     rooms={item?.rooms}
+                    address={item?.address}
                   />
                 ))}
               </View>

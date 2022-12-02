@@ -63,6 +63,7 @@ export default function HotelCard({
             hotelName,
             guests,
             rooms,
+            address
           },
         }),
       );
