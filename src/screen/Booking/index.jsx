@@ -6,39 +6,43 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import React, {useState} from 'react';
 import {Button, Input} from '../../component/atoms';
-import {colors} from '../../utils';
+import {colors, formatIDR} from '../../utils';
 import {Header} from '../../component/molecules';
-import { addBookHistory } from '../../features/bookHistorySlice';
+import {addBookHistory} from '../../features/bookHistorySlice';
 
 function makeid(length) {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var result = '';
+  var characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
+  for (var i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
 }
 
 const lengthOfDay = (date1, date2) => {
-  let d1 = new Date(date1)
-  let d2 = new Date(date2)
+  let d1 = new Date(date1);
+  let d2 = new Date(date2);
   let Difference_In_Time = d2.getTime() - d1.getTime();
   let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-  return(Difference_In_Days)
-}
+  return Difference_In_Days;
+};
 
 export default function Booking({route, navigation}) {
-  const dispatch = useDispatch()
-  const {price, room, bed_type, person, checkIn, checkOut, name_room, image} = route.params;
-  
-  const user = useSelector(state => state.login?.user)
-  const hotel_name = useSelector(state => state.detail?.detail?.hotel_name)
+  const dispatch = useDispatch();
+  const {price, room, bed_type, person, checkIn, checkOut, name_room, image} =
+    route.params;
 
-  const [fullName, setFullName] = useState(user.firstName + " " + user.lastName);
+  const user = useSelector(state => state.login?.user);
+  const hotel_name = useSelector(state => state.detail?.detail?.hotel_name);
+
+  const [fullName, setFullName] = useState(
+    user.firstName + ' ' + user.lastName,
+  );
   const [email, setEmail] = useState(user.email);
   const [telephone, setTelephone] = useState(user.phone);
 
@@ -61,14 +65,17 @@ export default function Booking({route, navigation}) {
                   source={{uri: image}}
                   style={{width: 90, height: 90, borderRadius: 10}}
                 />
-                <View style={{marginLeft: 10}}>
+                <View style={{marginLeft: 10, maxWidth: 200}}>
                   <Text style={styles.nameRoom} numberOfLines={2}>
                     {name_room}
                   </Text>
                   <Text style={styles.countBed}>
                     {room} x {bed_type}
                   </Text>
-                  <Text style={styles.person}>{person} Person</Text>
+
+                  <Text style={styles.person}>
+                    {lengthOfDay(checkIn, checkOut)} Day | {person} Person
+                  </Text>
                 </View>
               </View>
               <View style={styles.arrivalDate}>
@@ -113,29 +120,32 @@ export default function Booking({route, navigation}) {
             <Text style={styles.titleHeader}>Total Payment</Text>
             <View style={styles.totalPrice}>
               <Text>Total</Text>
-              <Text>IDR {price * room}</Text>
+              <Text>{formatIDR.format(price * room)}</Text>
             </View>
           </View>
-          <Button 
-            title="Booking" 
-            color={colors.darkBlue} 
-            onPress={() => dispatch(addBookHistory({
-              username: user.username, 
-              data: {
-                hotel_name,  
-                book_id: makeid(5), 
-                stay_length: lengthOfDay(checkIn, checkOut), 
-                checkIn, 
-                checkOut, 
-                person, 
-                room, 
-                name_room, 
-                price: price*room 
-              } 
-            }))
-          }/>
+          <Button
+            title="Booking"
+            color={colors.darkBlue}
+            onPress={() =>
+              dispatch(
+                addBookHistory({
+                  username: user.username,
+                  data: {
+                    hotel_name,
+                    book_id: makeid(5),
+                    stay_length: lengthOfDay(checkIn, checkOut),
+                    checkIn,
+                    checkOut,
+                    person,
+                    room,
+                    name_room,
+                    price: price * room,
+                  },
+                }),
+              )
+            }
+          />
         </View>
-        
       </ScrollView>
     </SafeAreaView>
   );
@@ -150,7 +160,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   header: {
-    padding: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     backgroundColor: colors.darkBlue,
   },
   contentInput: {

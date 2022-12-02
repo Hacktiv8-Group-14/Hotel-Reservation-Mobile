@@ -51,6 +51,7 @@ export default function Rooms({route, navigation}) {
                 checkIn: checkIn,
                 checkOut: checkOut,
                 image: room.rooms[item?.room_id].photos,
+                detail_room: room.rooms[item?.room_id],
               })
             }
           />
