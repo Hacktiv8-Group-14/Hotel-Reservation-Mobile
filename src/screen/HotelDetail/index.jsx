@@ -20,9 +20,10 @@ import {fetchDetail} from '../../features/detailHotelSlice';
 import {fetchReview} from '../../features/ReviewSlice';
 import Kebijakan from './parts/Kebijakan';
 import {formatIDR} from '../../utils';
+import Swiper from 'react-native-swiper'
 
 export default function DetailHotel({route, navigation}) {
-  const {hotel_id, checkIn, checkOut, guests, rooms} = route.params;
+  const {hotel_id, checkIn, checkOut, guests, rooms, image} = route.params;
   const [hotelPhotos, setHotelPhotos] = useState([]);
   const [lineText, setLineText] = useState(3);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -40,8 +41,7 @@ export default function DetailHotel({route, navigation}) {
           url: 'https://apidojo-booking-v1.p.rapidapi.com/properties/get-hotel-photos',
           params: {hotel_ids: hotel_id, languagecode: 'id'},
           headers: {
-            'X-RapidAPI-Key':
-              '8acc31ed09mshcd579e2a1d4d065p1adbebjsn5a767b7f288e',
+            'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
             'X-RapidAPI-Host': 'apidojo-booking-v1.p.rapidapi.com',
           },
         });
@@ -77,37 +77,19 @@ export default function DetailHotel({route, navigation}) {
         <>
           <ScrollView>
             <View>
-              {/* <ScrollView 
-                horizontal={true}
-                style={{flexDirection: 'row', borderWidth: 2}}
-              >
-                {hotelPhotos.map((item, index) => {
-                  <Image
-                    key={index}
-                    source={{
-                      uri: `https://cf.bstatic.com${item[6]}`,
-                    }}
-                    style={styles.image}
-                  />
+              <Swiper style={{ height: 230 }}>
+                {hotelPhotos.slice(0, 5).map((item, index) => {
+                  return(
+                    <Image
+                      key={index}
+                      source={{
+                        uri: `https://cf.bstatic.com${item[5]}`,
+                      }}
+                      style={styles.image}
+                    />
+                  )
                 })}
-              </ScrollView> */}
-              <FlatList
-                data={hotelPhotos}
-                style={styles.image}
-                renderItem={({item}) => (
-                  <Image
-                    source={{
-                      uri: `https://cf.bstatic.com${item[6]}`,
-                    }}
-                    style={styles.image}
-                  />
-                )}
-                pagingEnabled
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                onScroll={onScroll}
-                {...flatListOptimizationProps}
-              />
+              </Swiper>
               <View style={styles.header}>
                 <Header onPress={() => navigation.goBack()} />
               </View>

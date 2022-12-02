@@ -22,6 +22,7 @@ export default function DetailRoom({route, navigation}) {
     checkIn,
     checkOut,
     detail_room,
+    mainImage
   } = route.params;
 
   console.log(detail_room);
@@ -80,8 +81,9 @@ export default function DetailRoom({route, navigation}) {
           <View style={styles.contentImage}>
             <Text style={styles.title}>Photos</Text>
             <ScrollView horizontal={true}>
-              {image?.map(item => (
+              {image?.map((item, index) => (
                 <Image
+                  key={index}
                   source={{
                     uri: item.url_original,
                   }}
@@ -92,7 +94,7 @@ export default function DetailRoom({route, navigation}) {
           </View>
           <View style={styles.container}>
             <Text style={styles.title}>Description</Text>
-            <Text>{detail_room?.description}</Text>
+            <Text style={{ color: colors.darkGrey }}>{detail_room?.description}</Text>
           </View>
         </View>
       </ScrollView>
@@ -139,6 +141,7 @@ export default function DetailRoom({route, navigation}) {
               checkOut: checkOut,
               name_room: name_room,
               image: image[1]?.url_original,
+              mainImage
             })
           }
         />
