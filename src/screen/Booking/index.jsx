@@ -72,7 +72,7 @@ export default function Booking({route, navigation}) {
             <View style={{marginVertical: 10}}>
               <Input
                 placeholder="email@gmail.com"
-                type="user"
+                type="email"
                 onChangeText={value => setEmail(value)}
                 value={email}
                 backgroundColor={colors.grey}

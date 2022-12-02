@@ -55,6 +55,11 @@ export default function Input({
       ) : (
         <></>
       )}
+      {type === 'email' ? (
+        <Ionicons name={'mail-outline'} style={styles.icon(type)} />
+      ) : (
+        <></>
+      )}
     </View>
   );
 }
@@ -62,20 +67,24 @@ export default function Input({
 const styles = StyleSheet.create({
   Input: (type, backgroundColor) => ({
     borderRadius: 10,
-    backgroundColor:
-      backgroundColor === backgroundColor ? backgroundColor : colors.white,
+    backgroundColor: backgroundColor ? backgroundColor : colors.white,
     paddingRight: type === 'password' || type === 'search' ? 40 : 20,
-    paddingLeft: type === 'user' || type === 'telephone' ? 40 : 20,
+    paddingLeft:
+      type === 'user' || type === 'telephone' || type === 'email' ? 40 : 20,
     color: colors.black,
   }),
   icon: type => ({
     position: 'absolute',
-    right: type === 'user' || type === 'telephone' ? null : 0,
+    right:
+      type === 'user' || type === 'telephone' || type === 'email' ? null : 0,
     top: 0,
     fontSize: 20,
     padding: 14,
     color:
-      type === 'search' || type === 'user' || type === 'telephone'
+      type === 'search' ||
+      type === 'user' ||
+      type === 'telephone' ||
+      type === 'email'
         ? colors.darkGrey
         : colors.black,
   }),
