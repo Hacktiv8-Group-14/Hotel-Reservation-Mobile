@@ -26,7 +26,6 @@ export const fetchReview = createAsyncThunk(
           },
         },
       );
-      console.log("api",process.env.REACT_APP_API_KEY);
       return response.data.result;
     } catch (err) {
       throw err;

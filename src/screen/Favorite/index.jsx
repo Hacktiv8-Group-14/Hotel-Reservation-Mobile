@@ -12,6 +12,25 @@ import {
 import { Button } from '../../component/atoms';
 import HotelCard from '../../component/molecules/HotelCard';
 import { colors } from '../../utils';
+
+const formatDate = (date) => {
+  let month = '' + (date.getMonth() + 1);
+  let day = '' + date.getDate();
+  let year = date.getFullYear();
+
+  if (month.length < 2) {
+    month = '0' + month;
+  }
+  if (day.length < 2) {
+    day = '0' + day;
+  }
+  return [year, month, day].join('-');
+};
+
+const today = new Date()
+const tomorrow = new Date()
+tomorrow.setDate(tomorrow.getDate() + 1)
+
 export default function Favorite({navigation}) {
 
   const user = useSelector(state => state?.login?.user)
@@ -37,6 +56,16 @@ export default function Favorite({navigation}) {
                     guests={item?.guests}
                     rooms={item?.rooms}
                     address={item?.address}
+                    onPress={() =>
+                      navigation.navigate('DetailHotel', {
+                        hotel_id: item?.hotelId,
+                        checkIn: formatDate(today),
+                        checkOut: formatDate(tomorrow),
+                        guests: item?.guests,
+                        rooms: item?.rooms,
+                        image: item?.image
+                      })
+                    }
                   />
                 ))}
               </View>

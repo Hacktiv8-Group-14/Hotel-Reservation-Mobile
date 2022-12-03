@@ -71,8 +71,8 @@ export default function DetailRoom({route, navigation}) {
           </View>
           <View style={styles.facilities}>
             <ScrollView horizontal={true}>
-              {detail_room?.highlights?.map(item => (
-                <Text style={styles.facilitiesTitle}>
+              {detail_room?.highlights?.map((item, index) => (
+                <Text key={index} style={styles.facilitiesTitle}>
                   {item?.translated_name}
                 </Text>
               ))}

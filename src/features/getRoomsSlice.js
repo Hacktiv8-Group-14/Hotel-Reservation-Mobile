@@ -29,7 +29,6 @@ export const fetchRooms = createAsyncThunk('rooms/fetchRooms', async props => {
         },
       },
     );
-    console.log("api",process.env.REACT_APP_API_KEY);
     return response.data[0];
   } catch (err) {
     throw err;
