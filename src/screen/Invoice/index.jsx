@@ -11,24 +11,31 @@ import {
 } from 'react-native';
 import {colors} from '../../utils';
 import {Button} from '../../component/atoms';
-import { Header } from '../../component/molecules';
-import { useSelector } from 'react-redux';
+import {Header} from '../../component/molecules';
+import {useSelector} from 'react-redux';
 
 export default function Invoice({route, navigation}) {
-  const { book_id, afterCheckout } = route.params
-  const user = useSelector(state => state.login.user)
-  const bookHistory = useSelector(state => state.bookHistory.bookHistories[user.username])
-  const bookHistoryById = bookHistory.find(item => item.book_id === book_id)
-  const imageResize = (img) => img?.replace('square60', 'max500');
-  
+  const {book_id, afterCheckout} = route.params;
+  const user = useSelector(state => state.login.user);
+  const bookHistory = useSelector(
+    state => state.bookHistory.bookHistories[user.username],
+  );
+  const bookHistoryById = bookHistory.find(item => item.book_id === book_id);
+  const imageResize = img => img?.replace('square60', 'max500');
+
+  console.log(bookHistoryById);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
-          <View style={{ padding: 10, backgroundColor: colors.darkBlue }}>
-            <Header 
-              title="Booking Detail"
-              onPress={() => afterCheckout ? navigation.navigate("main") : navigation.goBack()}
+          <View style={{padding: 20, backgroundColor: colors.darkBlue}}>
+            <Header
+              title="Invoice"
+              onPress={() =>
+                afterCheckout
+                  ? navigation.navigate('main')
+                  : navigation.goBack()
+              }
             />
           </View>
           <Image
@@ -41,26 +48,31 @@ export default function Invoice({route, navigation}) {
             <Text numberOfLines={2} style={styles.textHeader}>
               {bookHistoryById.hotel_name}
             </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                backgroundColor: colors.darkBlue,
+                padding: 5,
+                borderRadius: 10,
+              }}>
+              <Text style={styles.text(colors.white)}>Booking ID:</Text>
+              <Text style={styles.invoiceId}>{bookHistoryById.book_id}</Text>
+            </View>
             <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>Booking ID:</Text>
+              <Text style={styles.text(colors.darkGrey)}>
+                Transaction Time:
+              </Text>
               <Text
                 style={[
                   styles.text(colors.black),
                   {flex: 1, textAlign: 'right'},
                 ]}>
-                {bookHistoryById.book_id}
+                {bookHistoryById.transaction_time}
               </Text>
             </View>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>Length of Stay:</Text>
-              <Text
-                style={[
-                  styles.text(colors.black),
-                  {flex: 1, textAlign: 'right'},
-                ]}>
-                {bookHistoryById.stay_length} days
-              </Text>
-            </View>
+
             <View style={styles.rowContainer}>
               <Text style={styles.text(colors.darkGrey)}>Check In Date:</Text>
               <Text
@@ -79,6 +91,16 @@ export default function Invoice({route, navigation}) {
                   {flex: 1, textAlign: 'right'},
                 ]}>
                 {bookHistoryById.checkOut}
+              </Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <Text style={styles.text(colors.darkGrey)}>Length of Stay:</Text>
+              <Text
+                style={[
+                  styles.text(colors.black),
+                  {flex: 1, textAlign: 'right'},
+                ]}>
+                {bookHistoryById.stay_length} days
               </Text>
             </View>
             <View style={styles.rowContainer}>
@@ -143,4 +165,11 @@ const styles = StyleSheet.create({
     color: color,
     fontSize: 14,
   }),
+  invoiceId: {
+    fontWeight: 'bold',
+    color: colors.darkBlue,
+    backgroundColor: colors.yellow,
+    padding: 8,
+    borderRadius: 10,
+  },
 });

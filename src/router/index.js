@@ -15,10 +15,10 @@ import {
   Review,
   Rooms,
   DetailRoom,
+  BookingSuccess,
 } from '../screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {colors} from '../utils';
 import {useSelector} from 'react-redux';
 
 const Stack = createStackNavigator();
@@ -136,6 +136,11 @@ const Router = () => {
       <Stack.Screen
         name="Invoice"
         component={Invoice}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="BookingSuccess"
+        component={BookingSuccess}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

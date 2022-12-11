@@ -24,6 +24,18 @@ function makeid(length) {
   return result;
 }
 
+const date = new Date();
+
+const convertDate = inputFormat => {
+  const pad = s => {
+    return s < 10 ? '0' + s : s;
+  };
+  var d = new Date(inputFormat);
+  return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
+};
+
+console.log(convertDate(date));
+
 const lengthOfDay = (date1, date2) => {
   let d1 = new Date(date1);
   let d2 = new Date(date2);
@@ -34,9 +46,18 @@ const lengthOfDay = (date1, date2) => {
 
 export default function Booking({route, navigation}) {
   const dispatch = useDispatch();
-  const book_id = makeid(5)
-  const {price, room, bed_type, person, checkIn, checkOut, name_room, image, mainImage} =
-    route.params;
+  const book_id = makeid(12);
+  const {
+    price,
+    room,
+    bed_type,
+    person,
+    checkIn,
+    checkOut,
+    name_room,
+    image,
+    mainImage,
+  } = route.params;
 
   const user = useSelector(state => state.login?.user);
   const hotel_name = useSelector(state => state.detail?.detail?.hotel_name);
@@ -51,7 +72,7 @@ export default function Booking({route, navigation}) {
     <SafeAreaView style={styles.page}>
       <View style={styles.header}>
         <Header
-          title="Booking Page"
+          title="Booking"
           color={colors.white}
           onPress={() => navigation.goBack()}
         />
@@ -120,32 +141,39 @@ export default function Booking({route, navigation}) {
           <View>
             <Text style={styles.titleHeader}>Total Payment</Text>
             <View style={styles.totalPrice}>
-              <Text style={{ color: colors.darkBlue }}>Total</Text>
-              <Text style={{ color: colors.darkBlue }}>{formatIDR.format(price * room)}</Text>
+              <Text style={{color: colors.darkBlue}}>Total</Text>
+              <Text style={{color: colors.darkBlue}}>
+                {formatIDR.format(price * room)}
+              </Text>
             </View>
           </View>
           <Button
             title="Booking"
             color={colors.darkBlue}
             onPress={() => {
-              dispatch(addBookHistory({
-                username: user.username, 
-                data: {
-                  mainImage,
-                  hotel_name,  
-                  book_id, 
-                  stay_length: lengthOfDay(checkIn, checkOut), 
-                  checkIn, 
-                  checkOut, 
-                  person, 
-                  room, 
-                  name_room, 
-                  price: formatIDR.format(price * room) 
-                } 
-              }))
-              navigation.navigate("Invoice", { book_id, afterCheckout: true })
-            }
-          }/>
+              dispatch(
+                addBookHistory({
+                  username: user.username,
+                  data: {
+                    mainImage,
+                    hotel_name,
+                    book_id,
+                    stay_length: lengthOfDay(checkIn, checkOut),
+                    checkIn,
+                    checkOut,
+                    person,
+                    room,
+                    name_room,
+                    price: formatIDR.format(price * room),
+                    transaction_time: convertDate(date),
+                  },
+                }),
+              );
+              navigation.navigate('BookingSuccess', {
+                transaction_time: convertDate(date),
+              });
+            }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -161,8 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   header: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    padding: 20,
     backgroundColor: colors.darkBlue,
   },
   contentInput: {

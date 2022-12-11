@@ -12,6 +12,7 @@ import Invoice from './Invoice';
 import Review from './Review';
 import Rooms from './Rooms';
 import DetailRoom from './DetailRoom';
+import BookingSuccess from './BookingSuccess';
 
 export {
   Sign,
@@ -28,4 +29,5 @@ export {
   Review,
   Rooms,
   DetailRoom,
+  BookingSuccess,
 };

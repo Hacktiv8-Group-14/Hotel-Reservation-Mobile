@@ -1,10 +1,10 @@
 import {View, Text, ScrollView} from 'react-native';
 import React from 'react';
 import CardDestinations from '../../../../component/molecules/CardDestinations';
-import { colors } from '../../../../utils';
-import { useNavigation } from '@react-navigation/native';
+import {colors} from '../../../../utils';
+import {useNavigation} from '@react-navigation/native';
 
-const formatDate = (date) => {
+const formatDate = date => {
   let month = '' + (date.getMonth() + 1);
   let day = '' + date.getDate();
   let year = date.getFullYear();
@@ -18,14 +18,13 @@ const formatDate = (date) => {
   return [year, month, day].join('-');
 };
 
-const today = new Date()
-const tomorrow = new Date()
-tomorrow.setDate(tomorrow.getDate() + 1)
+const today = new Date();
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
 
 export default function PopularDestinations() {
+  const navigation = useNavigation();
 
-  const navigation = useNavigation()
-  
   const data = [
     {
       title: 'Ubud',
@@ -40,10 +39,10 @@ export default function PopularDestinations() {
         'http://balipancatour.com/wp-content/uploads/2012/01/kuta-beach-bali.jpg',
     },
     {
-      title: 'The Palace of Yogyakarta',
-      City: 'Yogyakarta',
+      title: 'Komodo',
+      City: 'Bajo',
       image:
-        'https://idetrips.com/wp-content/uploads/2018/06/java-culture-600x451.jpg',
+        'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/cc/4a/d7/komodo-adala-sala-satu.jpg?w=1200&h=-1&s=1',
     },
     {
       title: 'Tugu',
@@ -55,14 +54,16 @@ export default function PopularDestinations() {
 
   return (
     <View>
-      <Text style={{ color: colors.darkBlue, fontSize: 16, fontWeight: "600" }}>Popular Destinations</Text>
+      <Text style={{color: colors.darkBlue, fontSize: 16, fontWeight: '600'}}>
+        Popular Destinations
+      </Text>
       <ScrollView
         horizontal={true}
         style={{flexDirection: 'row', marginVertical: 10}}>
         {data?.map((item, index) => (
-          <CardDestinations 
-            key={index} 
-            uri={item.image} 
+          <CardDestinations
+            key={index}
+            uri={item.image}
             title={item.title}
             onPress={() =>
               navigation.navigate('SearchResult', {
@@ -72,7 +73,7 @@ export default function PopularDestinations() {
                 guests: 1,
                 rooms: 1,
               })
-            } 
+            }
           />
         ))}
       </ScrollView>

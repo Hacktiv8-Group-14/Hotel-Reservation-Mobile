@@ -12,7 +12,16 @@ import {
 } from 'react-native';
 import {colors} from '../../../utils';
 
-export default function BookHistoryCard({onPress, hotel_name, stay_length, checkIn, checkOut, price, mainImage}) {
+export default function BookHistoryCard({
+  onPress,
+  hotel_name,
+  stay_length,
+  checkIn,
+  checkOut,
+  price,
+  mainImage,
+  transaction,
+}) {
   const imageResize = mainImage?.replace('square60', 'max500');
   return (
     <View style={styles.container}>
@@ -27,19 +36,26 @@ export default function BookHistoryCard({onPress, hotel_name, stay_length, check
           }}
           style={styles.img}
         />
-        <View style={styles.content}>
-          <View style={{flex: 1, justifyContent: 'center'}}>
-            <Text numberOfLines={2} style={styles.textHeader(colors.black)}>
-              {hotel_name}
-            </Text>
-            <Text style={styles.textHeader(colors.darkGrey)}>
-              {checkIn} - {checkOut} ({stay_length} days)
-            </Text>
+        <View style={styles.transactionDate}>
+          <Text style={{color: colors.white}}>
+            Transaction Date {transaction}
+          </Text>
+        </View>
+        <View style={{padding: 10}}>
+          <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+            <View>
+              <Text numberOfLines={2} style={styles.name}>
+                {hotel_name}
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.text(colors.darkBlue)}>{price}</Text>
+            </View>
           </View>
-          <View style={{flex: 0.1}} />
-          <View style={{justifyContent: 'center', alignItems: 'flex-end'}}>
-            <Text style={styles.text(colors.darkBlue)}>{price}</Text>
-          </View>
+          <Text
+            style={{color: colors.darkGrey, fontSize: 12, fontWeight: '400'}}>
+            {checkIn} - {checkOut} ({stay_length} days)
+          </Text>
         </View>
       </Pressable>
     </View>
@@ -66,19 +82,22 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
   },
-  content: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-    padding: 10,
+  name: {
+    color: colors.black,
+    maxWidth: 200,
   },
-  textHeader: color => ({
-    fontSize: 13,
-    fontWeight: '600',
-    color: color,
-  }),
   text: color => ({
     color: color,
     fontSize: 12,
     fontWeight: '400',
   }),
+  transactionDate: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: 0,
+    padding: 5,
+    backgroundColor: colors.darkBlue,
+    borderTopStartRadius: 10,
+    borderBottomEndRadius: 10,
+  },
 });

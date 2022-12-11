@@ -17,32 +17,60 @@ import {Button} from '../../component/atoms';
 
 export default function Receipt({navigation}) {
   const user = useSelector(state => state?.login?.user);
-  const bookHistories = useSelector(state => state?.bookHistory.bookHistories[user?.username])
+  const bookHistories = useSelector(
+    state => state?.bookHistory.bookHistories[user?.username],
+  );
+
+  console.log(bookHistories);
 
   if (user) {
     return (
       <SafeAreaView>
+        <View style={{backgroundColor: colors.darkBlue, padding: 20}}>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: 18,
+              fontWeight: '700',
+              textAlign: 'center',
+            }}>
+            Booking History
+          </Text>
+        </View>
         <ScrollView>
-          <View style={{margin: 20}}>
-            <Text style={{ color: colors.black, fontSize: 18, fontWeight: "700" }}>Booking History</Text>
+          <View style={{margin: 20, marginBottom: 60}}>
             {bookHistories ? (
-              <View style={{ marginTop: 15 }}>
+              <View style={{marginTop: 15}}>
                 {bookHistories?.map(item => (
                   <BookHistoryCard
-                    key={item?.book_id} 
-                    onPress={() => navigation.navigate('Invoice', { book_id: item?.book_id, afterCheckout: false })} 
+                    key={item?.book_id}
+                    onPress={() =>
+                      navigation.navigate('Invoice', {
+                        book_id: item?.book_id,
+                        afterCheckout: false,
+                      })
+                    }
                     hotel_name={item?.hotel_name}
                     stay_length={item?.stay_length}
                     checkIn={item?.checkIn}
                     checkOut={item?.checkOut}
                     price={item?.price}
                     mainImage={item?.mainImage}
+                    transaction={item?.transaction_time}
                   />
                 ))}
               </View>
             ) : (
-              <View style={{ marginTop: 50 }}>
-                <Text style={{ color: colors.black, fontSize: 18, fontStyle: "italic", textAlign: "center" }}>Empty~</Text>
+              <View style={{marginTop: 50}}>
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontSize: 18,
+                    fontStyle: 'italic',
+                    textAlign: 'center',
+                  }}>
+                  Empty~
+                </Text>
               </View>
             )}
           </View>

@@ -5,7 +5,6 @@ import Button from '../../component/atoms/Button';
 import {colors} from '../../utils';
 
 export default function GetStarted({navigation}) {
-
   return (
     <View style={styles.page}>
       <View></View>

@@ -20,7 +20,7 @@ import {fetchDetail} from '../../features/detailHotelSlice';
 import {fetchReview} from '../../features/ReviewSlice';
 import Kebijakan from './parts/Kebijakan';
 import {formatIDR} from '../../utils';
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
 
 export default function DetailHotel({route, navigation}) {
   const {hotel_id, checkIn, checkOut, guests, rooms, image} = route.params;
@@ -45,6 +45,7 @@ export default function DetailHotel({route, navigation}) {
             'X-RapidAPI-Host': 'apidojo-booking-v1.p.rapidapi.com',
           },
         });
+
         setHotelPhotos(response.data.data[hotel_id]);
       } catch (e) {
         throw e;
@@ -77,9 +78,9 @@ export default function DetailHotel({route, navigation}) {
         <>
           <ScrollView>
             <View>
-              <Swiper style={{ height: 230 }}>
+              <Swiper style={{height: 230}}>
                 {hotelPhotos.slice(0, 5).map((item, index) => {
-                  return(
+                  return (
                     <Image
                       key={index}
                       source={{
@@ -87,7 +88,7 @@ export default function DetailHotel({route, navigation}) {
                       }}
                       style={styles.image}
                     />
-                  )
+                  );
                 })}
               </Swiper>
               <View style={styles.header}>
