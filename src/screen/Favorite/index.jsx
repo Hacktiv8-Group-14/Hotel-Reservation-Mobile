@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,11 +9,11 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import { Button } from '../../component/atoms';
+import {Button} from '../../component/atoms';
 import HotelCard from '../../component/molecules/HotelCard';
-import { colors } from '../../utils';
+import {colors} from '../../utils';
 
-const formatDate = (date) => {
+const formatDate = date => {
   let month = '' + (date.getMonth() + 1);
   let day = '' + date.getDate();
   let year = date.getFullYear();
@@ -27,25 +27,36 @@ const formatDate = (date) => {
   return [year, month, day].join('-');
 };
 
-const today = new Date()
-const tomorrow = new Date()
-tomorrow.setDate(tomorrow.getDate() + 1)
+const today = new Date();
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
 
 export default function Favorite({navigation}) {
+  const user = useSelector(state => state?.login?.user);
+  const favorites = useSelector(
+    state => state?.favorite?.favorites[user?.username],
+  );
 
-  const user = useSelector(state => state?.login?.user)
-  const favorites = useSelector(state => state?.favorite?.favorites[user?.username])
-
-  if(user){
+  if (user) {
     return (
       <SafeAreaView>
+        <View style={{backgroundColor: colors.darkBlue, padding: 20}}>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: 18,
+              fontWeight: '700',
+              textAlign: 'center',
+            }}>
+            Favorite
+          </Text>
+        </View>
         <ScrollView>
-          <View style={{ margin: 20 }}>
-            <Text style={{ color: colors.black, fontSize: 18, fontWeight: "700" }}>Favorite Hotel</Text>
+          <View style={{margin: 20}}>
             {favorites ? (
-              <View style={{ marginTop: 15 }}>
+              <View style={{marginTop: 15}}>
                 {favorites?.map(item => (
-                  <HotelCard 
+                  <HotelCard
                     key={item?.hotelId}
                     hotelName={item?.hotelName}
                     hotelId={item?.hotelId}
@@ -63,21 +74,29 @@ export default function Favorite({navigation}) {
                         checkOut: formatDate(tomorrow),
                         guests: item?.guests,
                         rooms: item?.rooms,
-                        image: item?.image
+                        image: item?.image,
                       })
                     }
                   />
                 ))}
               </View>
             ) : (
-              <View style={{ marginTop: 50 }}>
-                <Text style={{ color: colors.black, fontSize: 18, fontStyle: "italic", textAlign: "center" }}>No favorite hotel yet~</Text>
+              <View style={{marginTop: 50}}>
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontSize: 18,
+                    fontStyle: 'italic',
+                    textAlign: 'center',
+                  }}>
+                  No favorite hotel yet~
+                </Text>
               </View>
             )}
           </View>
         </ScrollView>
       </SafeAreaView>
-    )
+    );
   } else {
     return (
       <SafeAreaView style={{flex: 1, margin: 20}}>
@@ -95,7 +114,7 @@ export default function Favorite({navigation}) {
           onPress={() => navigation.navigate('Sign')}
         />
       </SafeAreaView>
-    )
+    );
   }
 }
 

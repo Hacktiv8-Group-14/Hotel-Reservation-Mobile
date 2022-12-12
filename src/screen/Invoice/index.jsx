@@ -26,18 +26,16 @@ export default function Invoice({route, navigation}) {
   console.log(bookHistoryById);
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{padding: 20, backgroundColor: colors.darkBlue}}>
+        <Header
+          title="Invoice"
+          onPress={() =>
+            afterCheckout ? navigation.navigate('main') : navigation.goBack()
+          }
+        />
+      </View>
       <ScrollView>
         <View>
-          <View style={{padding: 20, backgroundColor: colors.darkBlue}}>
-            <Header
-              title="Invoice"
-              onPress={() =>
-                afterCheckout
-                  ? navigation.navigate('main')
-                  : navigation.goBack()
-              }
-            />
-          </View>
           <Image
             source={{
               uri: imageResize(bookHistoryById.mainImage),

@@ -11,13 +11,16 @@ import {SettingsRow} from './parts';
 import Button from '../../component/atoms/Button';
 import {colors} from '../../utils';
 import {removeLogin} from '../../features/loginSlice';
+import LogoutModal from './parts/LogoutModal';
+import {useState} from 'react';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
 
   const user = useSelector(state => state?.login?.user);
-  const favorites = useSelector(state => state?.favorite?.favorites)
-  const bookHistories = useSelector(state => state?.bookHistory?.bookHistories)
+  const favorites = useSelector(state => state?.favorite?.favorites);
+  const bookHistories = useSelector(state => state?.bookHistory?.bookHistories);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -97,7 +100,8 @@ export default function Profile({navigation}) {
             </>
           ) : (
             <View style={[styles.profileBox, {marginBottom: 10}]}>
-              <Text style={[styles.textHeader(colors.black), {marginBottom: 5}]}>
+              <Text
+                style={[styles.textHeader(colors.black), {marginBottom: 5}]}>
                 My Profile
               </Text>
               <Text style={styles.text(colors.black)}>
@@ -110,8 +114,7 @@ export default function Profile({navigation}) {
             onPress={
               user
                 ? () => {
-                    dispatch(removeLogin());
-                    navigation.navigate('Home');
+                    setModalVisible(true);
                   }
                 : () => {
                     navigation.navigate('Sign');
@@ -119,6 +122,17 @@ export default function Profile({navigation}) {
             }
             title={user ? 'Sign out' : 'Sign in'}
             color={colors.darkBlue}
+          />
+          <LogoutModal
+            visible={modalVisible}
+            onPressCancel={() => {
+              setModalVisible(false);
+            }}
+            Logout={() => {
+              dispatch(removeLogin());
+              navigation.navigate('Home');
+            }}
+            onRequestClose={() => setModalVisible(!modalVisible)}
           />
         </View>
       </ScrollView>
