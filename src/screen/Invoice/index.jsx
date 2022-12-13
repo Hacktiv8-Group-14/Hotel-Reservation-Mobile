@@ -65,7 +65,7 @@ export default function Invoice({route, navigation}) {
               <Text
                 style={[
                   styles.text(colors.black),
-                  {flex: 1, textAlign: 'right'},
+                  {flex: 1, textAlign: 'right', color: colors.black},
                 ]}>
                 {bookHistoryById.transaction_time}
               </Text>

@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
+import { headers } from '../utils';
 
 const initialState = {
   isPending: false,
@@ -20,13 +21,9 @@ export const fetchReview = createAsyncThunk(
             hotel_ids: hotel_id,
             languagecode: 'id',
           },
-          headers: {
-            'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-            'X-RapidAPI-Host': 'apidojo-booking-v1.p.rapidapi.com',
-          },
+          headers
         },
       );
-      console.log(process.env.REACT_APP_API_KEY);
       return response.data.result;
     } catch (err) {
       throw err;

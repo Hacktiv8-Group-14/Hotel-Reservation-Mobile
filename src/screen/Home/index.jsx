@@ -7,15 +7,13 @@ import {
   Image,
   Modal,
 } from 'react-native';
-
-import {colors} from '../../utils';
+import Destination from './parts/Destination';
+import {colors, DataPopular, DataTop} from '../../utils';
 import {Button, Input} from '../../component/atoms';
 import Header from '../../component/molecules/Header';
 import {useState, useEffect} from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import InputModal from './parts/InputModal';
-import TopDestinations from './parts/TopDestinations';
-import PopularDestinations from './parts/PopularDestinations';
 
 const maxDate = new Date();
 
@@ -186,8 +184,10 @@ export default function Home({navigation}) {
           </View>
         </View>
         <View style={{marginLeft: 20}}>
-          <TopDestinations />
-          <PopularDestinations />
+          <Destination title="Top Destinations" data={DataTop} />
+          <Destination title="Popular Destinations" data={DataPopular} />
+          {/* <TopDestinations />
+          <PopularDestinations /> */}
         </View>
       </ScrollView>
     </SafeAreaView>

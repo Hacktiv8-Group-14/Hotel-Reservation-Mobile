@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
+import { headers } from '../utils';
 
 const initialState = {
   isPending: false,
@@ -18,10 +19,7 @@ export const fetchHotels = createAsyncThunk(
         method: 'GET',
         url: `${process.env.REACT_APP_URL}/locations/auto-complete`,
         params: {text: location, languagecode: 'id'},
-        headers: {
-          'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-          'X-RapidAPI-Host': 'apidojo-booking-v1.p.rapidapi.com',
-        },
+        headers
       });
       const findDestType = responseLocation.data.find(
         result => result.dest_type === 'city',
@@ -42,12 +40,8 @@ export const fetchHotels = createAsyncThunk(
           order_by: 'popularity',
           languagecode: 'id',
         },
-        headers: {
-          'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-          'X-RapidAPI-Host': 'apidojo-booking-v1.p.rapidapi.com',
-        },
+        headers
       });
-      console.log(process.env.REACT_APP_API_KEY);
       return [responseHotels.data.result, responseHotels.data.search_id];
     } catch (e) {
       throw e;

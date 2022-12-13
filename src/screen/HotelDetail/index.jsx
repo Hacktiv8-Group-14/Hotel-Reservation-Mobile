@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import Header from '../../component/molecules/Header';
-import {colors} from '../../utils';
+import {colors, headers} from '../../utils';
 import Location from './parts/Location';
 import Button from '../../component/atoms/Button';
 import axios from 'axios';
@@ -40,10 +40,7 @@ export default function DetailHotel({route, navigation}) {
           method: 'GET',
           url: 'https://apidojo-booking-v1.p.rapidapi.com/properties/get-hotel-photos',
           params: {hotel_ids: hotel_id, languagecode: 'id'},
-          headers: {
-            'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-            'X-RapidAPI-Host': 'apidojo-booking-v1.p.rapidapi.com',
-          },
+          headers
         });
 
         setHotelPhotos(response.data.data[hotel_id]);
